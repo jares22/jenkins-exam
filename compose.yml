@@ -1,15 +1,26 @@
+version: '3.8'
+
 services:
   jenkins:
-    build: ./jenkins
-    container_name: jenkins
+    build: .
+    container_name: jenkins-terraform
     ports:
       - "8080:8080"
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
-    user: root # Needed to access docker.sock
+    environment:
+      - TF_IN_AUTOMATION=true
     restart: unless-stopped
+    user: root  # เพิ่มบรรทัดนี้
+
+  nginx:
+    image: nginx
+    container_name: nginx-container
+    ports:
+      - "8081:80"
+    restart: always
 
 volumes:
   jenkins_home:
